@@ -1,7 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
+import {auth} from "@/lib/better-auth/auth";
+import {headers} from "next/headers";
+import {redirect} from "next/navigation";
 
 const Layout = async ({ children }: { children : React.ReactNode }) => {
+    const session = await auth.api.getSession({ headers: await headers() })
+
+    if(session?.user) redirect('/')
 
     return (
         <main className="auth-layout">
@@ -18,26 +24,17 @@ const Layout = async ({ children }: { children : React.ReactNode }) => {
                     <blockquote className="auth-blockquote">
                         Signalist turned my watchlist into a winning list. The alerts are spot-on, and I feel more confident making moves in the market
                     </blockquote>
-                    <div className="flex w-full items-center">
+                    <div className="flex items-center justify-between">
                         <div>
                             <cite className="auth-testimonial-author">- Ethan R.</cite>
                             <p className="max-md:text-xs text-gray-500">Retail Investor</p>
                         </div>
-
-                        <div className="flex items-center gap-0.5 ml-auto">
-                            {[1,2,3,4,5].map((star) => (
-                                <Image
-                                    src="/assets/icons/star.svg"
-                                    alt="Star"
-                                    key={star}
-                                    width={20}
-                                    height={20}
-                                    className="w-5 h-5"
-                                />
+                        <div className="flex items-center gap-0.5">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <Image src="/assets/icons/star.svg" alt="Star" key={star} width={20} height={20} className="w-5 h-5" />
                             ))}
                         </div>
                     </div>
-
                 </div>
 
                 <div className="flex-1 relative">
